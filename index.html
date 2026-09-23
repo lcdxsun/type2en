@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>type2En · 打字译英语 — 会翻译的中文输入法</title>
+<meta name="description" content="type2En 是一款 Android 输入法:正常的中文拼音输入,打开「译」即可边打字边输出英文或日语。iOS 风格键盘,内置表情面板,词典本地存储保护隐私。">
+<style>
+  :root{
+    --purple:#7B68EE; --purple-deep:#5B4BC4; --coral:#F98080; --yellow:#FBF0D5;
+    --ink:#2B2B33; --gray:#77747F; --bg:#FAF8F4; --card:#FFFFFF; --line:#ECE8F2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.65}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  /* hero */
+  header{background:linear-gradient(135deg,#F3EFFF 0%,#FDF3D8 55%,#FBE4E4 100%);padding:64px 0 48px}
+  .badge{display:inline-block;background:#fff;color:var(--purple-deep);font-size:13px;font-weight:700;padding:4px 14px;border-radius:999px;box-shadow:0 2px 8px rgba(123,104,238,.12);letter-spacing:1px}
+  h1{font-size:44px;line-height:1.15;margin:18px 0 10px;letter-spacing:-1px}
+  h1 .en{color:var(--purple-deep)}
+  .tagline{font-size:19px;color:var(--gray);margin-bottom:28px}
+  .tagline b{color:var(--ink)}
+  .cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 30px;border-radius:14px;font-size:17px;font-weight:700;text-decoration:none;transition:transform .15s, box-shadow .15s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-main{background:linear-gradient(135deg,var(--purple) 0%,#9B8AF0 100%);color:#fff;box-shadow:0 8px 24px rgba(123,104,238,.35)}
+  .btn-ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+  .meta{font-size:13px;color:var(--gray);margin-top:14px}
+  .meta code{background:#fff;padding:2px 8px;border-radius:6px;font-size:12px;word-break:break-all}
+
+  /* sections */
+  section{padding:56px 0}
+  h2{font-size:30px;margin-bottom:8px;letter-spacing:-.5px}
+  .sub{color:var(--gray);margin-bottom:28px}
+  .eyebrow{font-size:13px;font-weight:800;letter-spacing:2px;color:var(--purple);text-transform:uppercase;margin-bottom:8px}
+
+  /* screenshots */
+  .gallery{display:flex;gap:18px;overflow-x:auto;padding:6px 4px 18px;scroll-snap-type:x mandatory}
+  .gallery img{height:300px;border-radius:16px;border:1px solid var(--line);box-shadow:0 12px 32px rgba(43,43,51,.12);scroll-snap-align:start;background:#fff}
+  .gallery figure{scroll-snap-align:start;flex:0 0 auto}
+  .gallery figcaption{font-size:13px;color:var(--gray);text-align:center;margin-top:10px}
+
+  /* features */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;transition:transform .15s,box-shadow .15s}
+  .card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(43,43,51,.08)}
+  .card .ico{font-size:30px;margin-bottom:12px}
+  .card h3{font-size:17px;margin-bottom:6px}
+  .card p{font-size:14px;color:var(--gray)}
+
+  /* steps */
+  .steps{counter-reset:step;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;position:relative}
+  .step::before{counter-increment:step;content:counter(step);position:absolute;top:-14px;left:22px;width:30px;height:30px;background:var(--coral);color:#fff;font-weight:800;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .step h3{font-size:16px;margin:8px 0 6px}
+  .step p{font-size:13.5px;color:var(--gray)}
+  .step code{background:#F4F1FB;color:var(--purple-deep);padding:1px 6px;border-radius:6px;font-size:12.5px}
+
+  /* download */
+  #download .box{background:linear-gradient(135deg,#2E2A3B 0%,#453B63 100%);color:#fff;border-radius:24px;padding:44px 40px;display:flex;flex-wrap:wrap;gap:30px;align-items:center;justify-content:space-between}
+  #download h2{color:#fff}
+  #download .sub{color:#B9B3CC}
+  #download .apk{font-size:15px;line-height:2}
+  #download .apk code{background:rgba(255,255,255,.12);padding:3px 10px;border-radius:8px;font-size:13px}
+  .btn-dl{display:inline-flex;align-items:center;gap:12px;background:linear-gradient(135deg,#FFD666 0%,#FFB84D 100%);color:#4A3A10;padding:16px 34px;border-radius:14px;font-size:18px;font-weight:800;text-decoration:none;box-shadow:0 10px 30px rgba(255,184,77,.35);transition:transform .15s}
+  .btn-dl:hover{transform:translateY(-2px)}
+  .btn-dl small{display:block;font-size:12px;font-weight:600;opacity:.75}
+  #download .hash{font-size:11.5px;color:#8F89A3;word-break:break-all;margin-top:10px}
+
+  /* privacy + faq */
+  details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:12px}
+  summary{font-weight:700;cursor:pointer;font-size:15px}
+  details p{font-size:14px;color:var(--gray);margin-top:10px}
+
+  footer{padding:40px 0 60px;color:#A9A5B3;font-size:13px;text-align:center}
+  footer a{color:var(--purple-deep);text-decoration:none}
+
+  @media (max-width:640px){
+    h1{font-size:34px}
+    header{padding:44px 0 36px}
+    .gallery img{height:240px}
+    #download .box{padding:32px 24px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="badge">⌨️ ANDROID 输入法 · v1.0.0</span>
+    <h1><span class="en">type2En</span> 打字译英语</h1>
+    <p class="tagline">一款<b>正常的中文拼音输入法</b>,打开「译」就能边打字边输出<b>英文 / 日文</b>。<br>不用切换 App,不用复制粘贴 —— 打的是拼音,上屏的是外语。</p>
+    <div class="cta">
+      <a class="btn btn-main" href="download/type2en-1.0.0.apk">⬇️ 下载 APK<span style="font-weight:500;font-size:13px">v1.0.0 · 0.7 MB</span></a>
+      <a class="btn btn-ghost" href="#install">如何启用</a>
+    </div>
+    <p class="meta">支持 Android 7.0+ · 离线词典本地运行 · 翻译走 HTTPS,不上传击键 · SHA256:<code>fa55331d…418cd0</code></p>
+  </div>
+</header>
+
+<section id="shots">
+  <div class="wrap">
+    <div class="eyebrow">Screenshots</div>
+    <h2>它长这样</h2>
+    <p class="sub">iOS 风格键盘 · 横滑候选 · 实时译文预览</p>
+    <div class="gallery">
+      <figure><img src="screenshots/hero-dasuan.png" alt="打 wodasuan 出候选「我打算」并实时译出 I intend to" loading="lazy"><figcaption>打 wodasuan → 候选「我打算」→ 实时译出 I intend to</figcaption></figure>
+      <figure><img src="screenshots/ni-love.png" alt="译·开:打 woaini 上屏 I love you" loading="lazy"><figcaption>译·开:打 woaini → 上屏 I love you</figcaption></figure>
+      <figure><img src="screenshots/candidates.png" alt="横向滚动的大量候选" loading="lazy"><figcaption>候选横向滚动:整句词 + 同音字组合</figcaption></figure>
+      <figure><img src="screenshots/japanese.png" alt="中→日模式:konnnichiwa 转假名" loading="lazy"><figcaption>切「中→日」:打拼音直接上屏日文</figcaption></figure>
+      <figure><img src="screenshots/settings.png" alt="设置页:切换译入语言" loading="lazy"><figcaption>设置页:一键切换 中→英 / 中→日</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="features" style="background:#F3F0FA">
+  <div class="wrap">
+    <div class="eyebrow">Features</div>
+    <h2>一个输入法,两种输出</h2>
+    <p class="sub">本质上是个标准拼音输入法 —— 「译」开关注定它的输出语言</p>
+    <div class="grid">
+      <div class="card"><div class="ico">🀄</div><h3>正常的拼音输入</h3><p>整句词组优先、同音字全量候选、横向滚动选择。关掉「译」,它就是你每天用的中文输入法。</p></div>
+      <div class="card"><div class="ico">🌐</div><h3>「译」开关注定输出</h3><p>点一下候选栏的「译」,实时预览英文译文,空格上屏即英文。再点一下,回到纯中文。</p></div>
+      <div class="card"><div class="ico">🇯🇵</div><h3>中 → 日 双语对</h3><p>设置里切换「中→英」或「中→日」。日语模式下拼音直出假名,常用词自动带汉字候选。</p></div>
+      <div class="card"><div class="ico">📚</div><h3>离线词典 + 在线纠偏</h3><p>约 2000 常用字与 500+ 词条本地秒出;联网时 MyMemory / Google 自动精修译文,失败无缝回退离线。</p></div>
+      <div class="card"><div class="ico">😀</div><h3>表情面板 + 符号层</h3><p>候选栏「😀」一键呼出 40 个常用表情直接插入;「123」切换数字符号;长按退格连删。</p></div>
+      <div class="card"><div class="ico">🎨</div><h3>iOS 原生质感</h3><p>仿苹果键盘配色与布局:白键灰底、蓝色回车、三槽候选栏,顺手不违和。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <div class="eyebrow">Get Started</div>
+    <h2>三步启用</h2>
+    <p class="sub">全程约一分钟,无需 Root</p>
+    <div class="steps">
+      <div class="step"><h3>下载安装</h3><p>点顶部「下载 APK」安装。若提示未知来源,允许一次即可。</p></div>
+      <div class="step"><h3>系统里启用</h3><p>打开 App 点「① 打开系统输入法设置」,在列表中开启 <code>type2En 中译英</code>,同意提示。</p></div>
+      <div class="step"><h3>切为默认</h3><p>回到 App 点「② 切换当前键盘」,选择 <code>type2En</code>。之后任何输入框都是它。</p></div>
+      <div class="step"><h3>开打</h3><p>默认上屏中文;点候选栏「译·关 → 译·开」,空格上屏英文或日文。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="download">
+  <div class="wrap">
+    <div class="box">
+      <div>
+        <div class="eyebrow" style="color:#C9BFFF">Download</div>
+        <h2>下载 type2En</h2>
+        <p class="sub">v1.0.0 · 2026-09 · APK 仅 0.7 MB,免 Root</p>
+        <p class="apk">
+          文件:<code>type2en-1.0.0.apk</code><br>
+          兼容:Android 7.0 - 15 (arm64 / armeabi / x86_64)<br>
+          校验:<code>SHA256 fa55331d…418cd0</code>
+        </p>
+      </div>
+      <div>
+        <a class="btn-dl" href="download/type2en-1.0.0.apk" download>⬇️ 下载 APK<small>type2en-1.0.0.apk · 0.7 MB</small></a>
+        <p class="hash">SHA256: fa55331dbaab8bfcdd028641f5e4b2892a289e193e84379ad39592b629418cd0</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="eyebrow">FAQ</div>
+    <h2>常见问题</h2>
+    <details open><summary>它和普通翻译 App 有什么区别?</summary><p>翻译 App 要你先想好中文、复制、粘贴;type2En 直接在你打字的地方工作 —— 候选栏实时显示译文,空格上屏,聊天、回邮件零切换。</p></details>
+    <details><summary>会不会上传我打的内容?</summary><p>拼音候选与词典完全在本地计算,不上传击键。只有「译·开」时,才把当前候选词经 HTTPS 发给翻译服务(MyMemory / Google)获取整句译文;断网时自动回退离线词典,照常打中文。</p></details>
+    <details><summary>译成日文的效果如何?</summary><p>日语译文依赖在线服务,离线时自动回退上屏中文。中文模式下打日语的另一种方式:切「中→日」后用左下角「あ」进入罗马音直输,离线也能打假名(如 konnichiha → こんにちは)。</p></details>
+    <details><summary>更新后键盘不见了?</summary><p>个别 ROM 覆盖安装后需要重启一次手机,输入法才会重新绑定,属系统行为。</p></details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    type2En · 打字译英语 — 用心打的每一个字,都值得被世界读懂。<br>
+    <a href="download/type2en-1.0.0.apk">下载 APK</a> · <a href="https://github.com/">GitHub</a> · Made with 💜 for Chinese speakers learning the world
+  </div>
+</footer>
+
+</body>
+</html>
